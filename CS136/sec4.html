@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-05-24 Tue 00:33 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Section 4 - C Model : Memory &amp; Control Flow</title>
+<meta name="author" content="Abdullah Zubair" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Section 4 - C Model : Memory &amp; Control Flow</h1>
+
+<div id="outline-container-org6b7d5da" class="outline-2">
+<h2 id="org6b7d5da">Control Flow</h2>
+<div class="outline-text-2" id="text-org6b7d5da">
+<p>
+Control flow is used to model how programs are intended to be executed based on
+certain control flow operators that potentially change the <b>program location</b>;
+the location in which the code execution is currently occurring.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfb072de" class="outline-2">
+<h2 id="orgfb072de">Types of Control Flow</h2>
+<div class="outline-text-2" id="text-orgfb072de">
+<p>
+In this course, we will be limited to the following control flows;
+</p>
+
+<ul class="org-ul">
+<li>Compound Statements</li>
+<li>Function calls</li>
+<li>Conditionals</li>
+<li>Iteration</li>
+</ul>
+</div>
+
+<div id="outline-container-org3ca2afe" class="outline-3">
+<h3 id="org3ca2afe">Compound Statements</h3>
+<div class="outline-text-3" id="text-org3ca2afe">
+<p>
+Compound statement&rsquo;s (or blocks) are sequences of statements (and definitions) to be executed in order.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb2e494e" class="outline-3">
+<h3 id="orgb2e494e">Function Calls</h3>
+<div class="outline-text-3" id="text-orgb2e494e">
+<p>
+When a function \(F\) is called, the program location jumps from the current function \(G\) to the start of the function
+\(F\), thereafter when the <code class="src src-c"><span style="color: #859900; font-weight: bold;">return</span></code> statement is reached, the program location
+jumps back to the location where it left in \(G\).
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orga06fb5a" class="outline-3">
+<h3 id="orga06fb5a">Conditional Statements</h3>
+<div class="outline-text-3" id="text-orga06fb5a">
+<p>
+Classic <code class="src src-c"><span style="color: #859900; font-weight: bold;">if</span></code> statements which are used for control flow; the concept of controlling the direction
+in which the program is intended to be executed in.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org82064c5" class="outline-3">
+<h3 id="org82064c5">Looping</h3>
+<div class="outline-text-3" id="text-org82064c5">
+<p>
+Similar to conditional statements but allow for repeated calls of a block of statements
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc56f846" class="outline-2">
+<h2 id="orgc56f846">Memory</h2>
+<div class="outline-text-2" id="text-orgc56f846">
+<ul class="org-ul">
+<li>One <b>bit</b> of memory has two possible states : 1 or 0.</li>
+<li>One <b>byte</b> of memory is composed of 8 bits, and therefore has \(2^{8}=256\) possible states.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3d2c873" class="outline-2">
+<h2 id="org3d2c873">Accessing Memory</h2>
+<div class="outline-text-2" id="text-org3d2c873">
+<ul class="org-ul">
+<li>The smallest accessible unit of memory is a byte.</li>
+<li>To access a byte, you <b>must</b> know its corresponding address.</li>
+<li>For example, if you have 1 MB of memory, then the addresses go from \(0 \rightarrow 256\).
+(Within each byte, each bit takes up a memory address)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org5c75218" class="outline-2">
+<h2 id="org5c75218">Defining Variables</h2>
+<div class="outline-text-2" id="text-org5c75218">
+<p>
+For a <b>variable definition</b>, C will
+</p>
+<ul class="org-ul">
+<li>Reserve space in memory to store the variable</li>
+<li>Keep track of the address of that storage location. (Done by the variable name)</li>
+<li>Store the initial value.</li>
+</ul>
+</div>
+
+<div id="outline-container-org74b3191" class="outline-3">
+<h3 id="org74b3191">Sizeof</h3>
+<div class="outline-text-3" id="text-org74b3191">
+<p>
+The <code class="src src-c"><span style="color: #859900; font-weight: bold;">sizeof</span></code> operator produces the number of bytes required to store a
+specific type. This is an operator, <b>not</b> a function, it can also be used on the <b>identifiers</b>
+themselves
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">n</span> = <span style="color: #6c71c4; font-weight: bold;">0</span>;
+    trace_int(<span style="color: #859900; font-weight: bold;">sizeof</span>(<span style="color: #b58900; font-style: italic;">int</span>)); <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">sizeof(int) =&gt; 4</span>
+    trace_int(<span style="color: #859900; font-weight: bold;">sizeof</span>(n)); <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">sizeof(n) =&gt; 4</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga736919" class="outline-2">
+<h2 id="orga736919">Integer Limits</h2>
+<div class="outline-text-2" id="text-orga736919">
+<p>
+Note that since C uses 4 bytes (32 bits) to store an  <code class="src src-c"><span style="color: #b58900; font-style: italic;">int</span></code>, we have \(2^{32}\) possible values that
+can be represented.
+</p>
+
+<p>
+The range of C <code class="src src-c"><span style="color: #b58900; font-style: italic;">int</span></code> values is : \(-2^{31} \rightarrow (2^{31} - 1)\)
+</p>
+</div>
+</div>
+
+<div id="outline-container-org774164d" class="outline-2">
+<h2 id="org774164d">Overflow</h2>
+<div class="outline-text-2" id="text-org774164d">
+<p>
+If we try to represent values outside of the  <code class="src src-c"><span style="color: #b58900; font-style: italic;">int</span></code> limits, integer overflow will occur.
+</p>
+
+<p>
+<b>Note</b>: The value of an integer after overflow has occurred is undefined.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org0122ede" class="outline-2">
+<h2 id="org0122ede">Char Type</h2>
+<div class="outline-text-2" id="text-org0122ede">
+<p>
+The <code class="src src-c"><span style="color: #b58900; font-style: italic;">char</span></code> type has the following properties:
+</p>
+<ul class="org-ul">
+<li>Can store integers</li>
+<li>Limited to 1 byte (8 bits) of storage</li>
+<li>\(2^{8}\) possible values ranging from \(-128 \rightarrow 127\).</li>
+<li>Due to memory limitations, we primarily store characters instead.</li>
+<li>Assignment of numbers to characters are based on ASCII;</li>
+</ul>
+<p>
+A designated system for assigning numbers to characters.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgccf975a" class="outline-2">
+<h2 id="orgccf975a">C character</h2>
+<div class="outline-text-2" id="text-orgccf975a">
+<p>
+You can choose to store either a number within the aftermentioned range of char&rsquo;s <i>or</i> you can store
+actual characters in singel quotes (&rsquo;&rsquo;).
+</p>
+
+<p>
+Note that since we have a somewhat equivlance relation between the numbers and characters in char types,
+they can be manipulated in various ways shown below
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #b58900; font-style: italic;">char</span> <span style="color: #268bd2;">letter_a</span> = <span style="color: #2aa198;">'a'</span>;
+<span style="color: #b58900; font-style: italic;">char</span> <span style="color: #268bd2;">ninety_seven</span> = <span style="color: #6c71c4; font-weight: bold;">97</span>;
+
+cout &lt;&lt; (letter_a == ninety_seven); <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">true</span>
+
+printf(<span style="color: #2aa198;">"%d\n"</span>, letter_a); <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">97</span>
+printf(<span style="color: #2aa198;">"%d\n"</span>, ninety_seven); <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">97</span>
+
+
+printf(<span style="color: #2aa198;">"%c\n"</span>, letter_a); <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">a</span>
+printf(<span style="color: #2aa198;">"%c\n"</span>, ninety_seven); <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">c</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org656e1f0" class="outline-2">
+<h2 id="org656e1f0">Character Arithmetic</h2>
+<div class="outline-text-2" id="text-org656e1f0">
+<p>
+We can use the fact that characters are actually integers to build useful functions
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #b58900; font-style: italic;">bool</span> <span style="color: #b58900;">is_lowercase</span>(<span style="color: #b58900; font-style: italic;">char</span> <span style="color: #268bd2;">c</span>){
+  <span style="color: #859900; font-weight: bold;">return</span> (c &gt;= <span style="color: #2aa198;">'a'</span>) &amp;&amp; (c &lt;= <span style="color: #2aa198;">'z'</span>);
+}
+
+<span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">to_lowercase(c) Converts the lowercase c to upercase</span>
+<span style="color: #b58900; font-style: italic;">char</span> <span style="color: #b58900;">to_lowercase</span>(<span style="color: #b58900; font-style: italic;">char</span> <span style="color: #268bd2;">c</span>){
+  <span style="color: #859900; font-weight: bold;">if</span> ((c &gt;= <span style="color: #2aa198;">'A'</span>) &amp;&amp;  (c &lt;= <span style="color: #2aa198;">'Z'</span>)){
+    <span style="color: #859900; font-weight: bold;">return</span> c - <span style="color: #2aa198;">'A'</span> + <span style="color: #2aa198;">'a'</span>;
+  } <span style="color: #859900; font-weight: bold;">else</span> {
+    <span style="color: #859900; font-weight: bold;">return</span> c;
+  }
+}
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga06e16a" class="outline-2">
+<h2 id="orga06e16a">Symbol &ldquo;Types&rdquo;</h2>
+<div class="outline-text-2" id="text-orga06e16a">
+<p>
+There are no precise symbol types in C, however we can essentially assign constants (often ints)
+with meaningful identifiers (&ldquo;names&rdquo;) with arbitrary values. This serves our purpose of having distinguishable
+identifiers to call for later on while not causing conflicts.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0558409" class="outline-2">
+<h2 id="org0558409">Floating Point Types</h2>
+<div class="outline-text-2" id="text-org0558409">
+<p>
+The C <code class="src src-c"><span style="color: #b58900; font-style: italic;">float</span></code> type can represent real number values, however suffer from limited memory allocation.
+In turn we often like to use <code class="src src-c">doubles</code> instead as they store twice as much memory allowing for more precision.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgf1907e3" class="outline-2">
+<h2 id="orgf1907e3">Structures</h2>
+<div class="outline-text-2" id="text-orgf1907e3">
+<p>
+Structures behave as compound data
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #859900; font-weight: bold;">struct</span> <span style="color: #b58900; font-style: italic;">posn</span> { <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">Name of struct</span>
+  <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">x</span>;      <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">Type and field names</span>
+  <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">y</span>;
+};
+
+<span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">main</span>(){
+  <span style="color: #859900; font-weight: bold;">struct</span> <span style="color: #b58900; font-style: italic;">posn</span> <span style="color: #268bd2;">p</span> = {<span style="color: #6c71c4; font-weight: bold;">3</span>,<span style="color: #6c71c4; font-weight: bold;">5</span>};
+
+  cout &lt;&lt; p.x &lt;&lt; <span style="color: #2aa198;">" "</span> &lt;&lt; p.y; <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">3 5</span>
+
+  p.x = <span style="color: #6c71c4; font-weight: bold;">4</span>;
+  p.y = <span style="color: #6c71c4; font-weight: bold;">24</span>;
+
+  cout &lt;&lt; p.x &lt;&lt; <span style="color: #2aa198;">" "</span> &lt;&lt; p.y; <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">4 24</span>
+}
+
+</pre>
+</div>
+
+<p>
+Fields must be identified with the corresponding types.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org67b45e8" class="outline-2">
+<h2 id="org67b45e8">Mutation with Structures</h2>
+<div class="outline-text-2" id="text-org67b45e8">
+<ul class="org-ul">
+<li>The assignment operator can be used to make a carbon copy of a struct to another struct.</li>
+<li>Individual fields can also be mutated.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #859900; font-weight: bold;">struct</span> <span style="color: #b58900; font-style: italic;">posn</span> <span style="color: #268bd2;">p</span> = {<span style="color: #6c71c4; font-weight: bold;">1</span>,<span style="color: #6c71c4; font-weight: bold;">2</span>};
+    <span style="color: #859900; font-weight: bold;">struct</span> <span style="color: #b58900; font-style: italic;">posn</span> <span style="color: #268bd2;">q</span> = {<span style="color: #6c71c4; font-weight: bold;">3</span>,<span style="color: #6c71c4; font-weight: bold;">4</span>};
+
+    p = q;
+    p.x = <span style="color: #6c71c4; font-weight: bold;">23</span>;
+
+    trace_int(p.x); <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">23</span>
+    trace_int(p.y); <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">4</span>
+</pre>
+</div>
+
+<p>
+<b>Note</b>: You cannot use the braces ({}) to mutate all of the fields of a structure at once, you <b>must</b> mutate
+each field.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #859900; font-weight: bold;">struct</span> <span style="color: #b58900; font-style: italic;">posn</span> <span style="color: #268bd2;">p</span> = {<span style="color: #6c71c4; font-weight: bold;">5</span>,<span style="color: #6c71c4; font-weight: bold;">3</span>};
+
+    p = {<span style="color: #6c71c4; font-weight: bold;">6</span>,<span style="color: #6c71c4; font-weight: bold;">7</span>}; <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">INVALID</span>
+
+    p.x = <span style="color: #6c71c4; font-weight: bold;">6</span>;   <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">VALID</span>
+    p.y = <span style="color: #6c71c4; font-weight: bold;">3</span>;
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org1a00d4d" class="outline-3">
+<h3 id="org1a00d4d">Equality and Printf</h3>
+<div class="outline-text-3" id="text-org1a00d4d">
+<p>
+You <b>cannot</b> use the equality operator on structures, instead you must define your own function.
+With the printf function, you <b>cannot</b> simply print an entire structure, instead you must print each
+field.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org92d76d9" class="outline-3">
+<h3 id="org92d76d9">Memory</h3>
+<div class="outline-text-3" id="text-org92d76d9">
+<p>
+A simple structure definition does <b>not</b> reserve any memory (unlike <code class="src src-c"><span style="color: #b58900; font-style: italic;">int</span></code>), memory is only reserved
+once you initialize it with some values for each of the fields.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb4d2711" class="outline-3">
+<h3 id="orgb4d2711">Sizeof Struct</h3>
+<div class="outline-text-3" id="text-orgb4d2711">
+<p>
+The size \(S\) of a struct will be at least;
+\[
+        S \geq \sum_{F \text{ field}} \text{sizeof}(F)
+    \]
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org4c080ea" class="outline-2">
+<h2 id="org4c080ea">The read-only &amp; Global Data Sections</h2>
+<div class="outline-text-2" id="text-org4c080ea">
+<ul class="org-ul">
+<li>If the global variable is *read-only*(A constant), it is placed in the read-only data section.</li>
+<li>Else if the global variable is mutable (non-constant), it is placed in the global data section.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgc58e74e" class="outline-2">
+<h2 id="orgc58e74e">Stacks</h2>
+<div class="outline-text-2" id="text-orgc58e74e">
+<p>
+In C, since function calls lead to return statements which leads to instances where the current location of the program
+can be at any arbitrary instance, we introduce the idea of a stack to understand the memory manipulation.
+</p>
+
+<p>
+A <b>stack</b> is an abstract framework where items are <b>pushed</b> on top of the stack and <b>popped</b> off of the stack.
+</p>
+</div>
+
+<div id="outline-container-org720de46" class="outline-3">
+<h3 id="org720de46">The call stack</h3>
+<div class="outline-text-3" id="text-org720de46">
+<p>
+Whenever a function is called, we can imagine that it is pushed onto the stack and is at the <i>top</i> of the stack.
+If another function is called, then we simply push that on to the stack. At any given instance, if the <code class="src src-c"><span style="color: #859900; font-weight: bold;">return</span></code>
+statement is reached in our current function, then we simply pop it off of the stack and return to our most recent function
+before that.
+</p>
+</div>
+</div>
+<div id="outline-container-orgd682248" class="outline-3">
+<h3 id="orgd682248">The return address</h3>
+<div class="outline-text-3" id="text-orgd682248">
+<p>
+The return address is the precise location where the our current function \(F\) was called <i>from</i>. This is important because when our current function
+\(F\) reaches its <code class="src src-c"><span style="color: #859900; font-weight: bold;">return</span></code> statement, it needs to know where to go back to.
+</p>
+
+<p>
+In this course we can simply represent the return address by the line number of the function our current function \(F\) was called from as well as the
+function name itself.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org6c8ad10" class="outline-2">
+<h2 id="org6c8ad10">Stack Frames</h2>
+<div class="outline-text-2" id="text-org6c8ad10">
+<ul class="org-ul">
+<li>The &ldquo;entries&rdquo; pushed onto the <i>call stack</i> are known as <b>stack frames</b>.</li>
+<li>Each function call will create a <i>stack frame</i>.</li>
+<li>Each frame will contain:
+<ul class="org-ul">
+<li>The <b>argument values</b>.</li>
+<li>All <b>local variables</b> (Both mutable and constants) that appear within the function block.</li>
+<li><p>
+The <b>return address</b> (The program location within the calling function to return to).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">        <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">add</span>(<span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">a</span>, <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">b</span>){
+          <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">j</span> = a + <span style="color: #6c71c4; font-weight: bold;">1</span>;
+          <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">k</span> = b + <span style="color: #6c71c4; font-weight: bold;">2</span>;
+          <span style="color: #859900; font-weight: bold;">return</span> j + k;
+        }
+
+        <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">main</span>(){
+          <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">x</span> = <span style="color: #6c71c4; font-weight: bold;">3</span>, <span style="color: #268bd2;">y</span> = <span style="color: #6c71c4; font-weight: bold;">5</span>;
+          add(x,y);
+        }
+
+        <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">Stack</span>
+<span style="color: #96A7A9; font-style: italic;">//  </span><span style="color: #96A7A9; font-style: italic;">================================================</span>
+<span style="color: #96A7A9; font-style: italic;">//  </span><span style="color: #96A7A9; font-style: italic;">pow4:</span>
+<span style="color: #96A7A9; font-style: italic;">//    </span><span style="color: #96A7A9; font-style: italic;">a : 3</span>
+<span style="color: #96A7A9; font-style: italic;">//    </span><span style="color: #96A7A9; font-style: italic;">b : 5</span>
+<span style="color: #96A7A9; font-style: italic;">//    </span><span style="color: #96A7A9; font-style: italic;">j : 4</span>
+<span style="color: #96A7A9; font-style: italic;">//    </span><span style="color: #96A7A9; font-style: italic;">k : 7</span>
+<span style="color: #96A7A9; font-style: italic;">//    </span><span style="color: #96A7A9; font-style: italic;">return address : main : 11</span>
+<span style="color: #96A7A9; font-style: italic;">//</span>
+<span style="color: #96A7A9; font-style: italic;">//  </span><span style="color: #96A7A9; font-style: italic;">===============================================</span>
+<span style="color: #96A7A9; font-style: italic;">//  </span><span style="color: #96A7A9; font-style: italic;">main:</span>
+<span style="color: #96A7A9; font-style: italic;">//    </span><span style="color: #96A7A9; font-style: italic;">x : 3</span>
+<span style="color: #96A7A9; font-style: italic;">//    </span><span style="color: #96A7A9; font-style: italic;">y : 5</span>
+<span style="color: #96A7A9; font-style: italic;">//    </span><span style="color: #96A7A9; font-style: italic;">return address : OS    (Special case for main)</span>
+
+
+</pre>
+</div></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="outline-container-orge9688ce" class="outline-3">
+<h3 id="orge9688ce">Global vs Local variables (Memory)</h3>
+<div class="outline-text-3" id="text-orge9688ce">
+<ul class="org-ul">
+<li>For <b>global variables</b>, space is reserved before the program begins to execute (during compilation).</li>
+<li>For <b>local variables</b>, space is only reserved when the function is actually called. When the function is returned, the local variables
+disappear as the function itself disappears (popped of the stack frame).</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org935871f" class="outline-2">
+<h2 id="org935871f">Calling a function</h2>
+<div class="outline-text-2" id="text-org935871f">
+</div>
+</div>
+</div>
+</body>
+</html>

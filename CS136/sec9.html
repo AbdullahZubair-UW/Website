@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-07-10 Sun 15:32 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Section 9 - Strings</title>
+<meta name="author" content=" Abdullah Zubair" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Section 9 - Strings</h1>
+<div id="outline-container-org40e3d06" class="outline-2">
+<h2 id="org40e3d06">Strings</h2>
+<div class="outline-text-2" id="text-org40e3d06">
+<p>
+In C, a string is simply an <b>array of characters</b>, terminated by a <b>null character</b>.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">char my_string[4] = {'c', 'a', 't', '\0'}
+</pre>
+</div>
+<p>
+The null character here is simply that character of value of zero; '\0'. (Note that this is the equivalent of the null
+value with respect to the field of characters)
+</p>
+</div>
+</div>
+
+<div id="outline-container-org99fe80c" class="outline-2">
+<h2 id="org99fe80c">String initialization</h2>
+<div class="outline-text-2" id="text-org99fe80c">
+<p>
+The following are all equivalent ways of defining the string "cat", the reason has to do with the morph ism of the interpretation of the 
+null character and the auto initialized zero.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">char a[4] =  {'c', 'a', 't', '\0'};
+char b[4] =  {'c', 'a', 't', 0};
+char c[4] =  {'c', 'a', 't'};
+char d[4] =  {99, 97, 116, '\0'};
+char e[4] =  "cat";
+char f[4] =  "cat\0";
+</pre>
+</div>
+<p>
+During initialization, C will automatically add the null terminator for you, should you choose to initialize the quotation using ("").
+</p>
+</div>
+
+<div id="outline-container-org846150f" class="outline-3">
+<h3 id="org846150f">Auto-init length</h3>
+<div class="outline-text-3" id="text-org846150f">
+<p>
+C can automatically assign the length of a string in a character array so you can define a given char array as follows,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">char a[] = "This is a long string";
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org919bbc3" class="outline-2">
+<h2 id="org919bbc3">Null termination</h2>
+<div class="outline-text-2" id="text-org919bbc3">
+<p>
+Will null terminators automatically integrated within strings, we can now loop as long as we don't encounter the null terminator, i.e as long
+as we have true. For example,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">// e_count(s) Countsr the # of e's and E's in the string s.
+int e_count(const char s[]){
+  int count = 0;
+  int i = 0;
+  while(s[i]){
+    if(s[i] == 'e' || s[i] == 'E') count++;
+    i++;
+  }
+  return count;
+}
+</pre>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+<div id="outline-container-org135516c" class="outline-2">
+<h2 id="org135516c">Lexicographical order</h2>
+<div class="outline-text-2" id="text-org135516c">
+<p>
+The manner in which we compare strings are lexicographical ordering. Suppose we have two strings, \(C = a_1a_2\ldots a_t, S = b_1b_2\ldots b_k\), then
+C checks each of the corresponding ASCII values by checking \(a_i < b_i\) for each index \(i\). If we find some index \(j\) for which \(a_j < b_j\), and this is the first
+index for which this is true, then we conclude that \(C\) is the lexicogrpahically smaller string. WLOG if \(t < k\), and \(a_i = b_i, i \leq t\), then we conclude that
+\(C\) is the lexicographically smaller string since the null terminator is smaller then all characters.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdd0f85c" class="outline-2">
+<h2 id="orgdd0f85c">String Library</h2>
+<div class="outline-text-2" id="text-orgdd0f85c">
+<p>
+The string library (#include &lt;string.h&gt;) provides some useful functions.
+</p>
+</div>
+<div id="outline-container-org1d041a1" class="outline-3">
+<h3 id="org1d041a1">strlen</h3>
+<div class="outline-text-3" id="text-org1d041a1">
+<p>
+Returns the length of the string <b>without</b> including the null terminator, hence it does not necessarily return 
+the length of the character array itself, this means that if the null terminator happens to appear in the middle of the
+array, then strlen will terminate at that position.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">strlen("Hello") // =&gt; 5
+strlen("cat") // =&gt; 3
+strlen("") // =&gt; 0
+</pre>
+</div>
+
+<p>
+Here is the source code for the function, note that it runs in \(O(n)\) (!!)
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">// time : O(n)
+int strlen(const char s[]){
+  int len = 0;
+  while(s[len]) len++;
+  return len;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org24ddcab" class="outline-3">
+<h3 id="org24ddcab">strcmp</h3>
+<div class="outline-text-3" id="text-org24ddcab">
+<p>
+Preforms a lexicographical comparison of two strings \(s1,s2\) in the manner described previously.
+</p>
+<ul class="org-ul">
+<li>If \(s1 = s2\), then strcmp\((s1,s2) ==  0\).</li>
+<li>If \(s1 < s2\), then strcmp\((s1,s2) <  0\).</li>
+<li>If \(s2 < s1\), then strcmp\((s1,s2) > 0\).</li>
+</ul>
+
+<p>
+Below is the source code,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">// time : O(m), where m = min(len(s1), len(s2)).
+int strcmp(const char s1[], const char s2[]){
+  int i = 0;
+  while(s1[i] == s2[i] &amp;&amp; s1[i]) i++;
+  return s1[i] - s2[i];
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga12417e" class="outline-3">
+<h3 id="orga12417e">strcpy</h3>
+<div class="outline-text-3" id="text-orga12417e">
+<p>
+The strcpy(dest, src) function overwrites the contents of dest with the contents of src. The source code is provided below,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">// time : O(n), n is the length of src.
+char *my_strcpy(char *dest, const char *src){
+  char *d = dest;
+  while(*src){
+    *d = *src;
+    d++;
+    src++;
+  }
+
+  *d = '\0';
+  return dest;
+}
+</pre>
+</div>
+<p>
+A few things to note;
+</p>
+<ul class="org-ul">
+<li>We need \(\text{len}(dest) \geq \text{len}(src)\), or else we'll get buffer overflow.</li>
+<li>We need to ensure that dest and src regions do not overlap.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org9406286" class="outline-3">
+<h3 id="org9406286">strcat</h3>
+<div class="outline-text-3" id="text-org9406286">
+<p>
+The function strcat(dest, src) appends src to the end of dest.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">// time : O(n + m) n,m are the lengths of src and dest.
+char *strcat(char *dest, const char *src){
+  strcpy(dest + strlen(dest), src);
+  return dest;
+}
+
+</pre>
+</div>
+<p>
+A few things to note;
+</p>
+<ul class="org-ul">
+<li>We need \(\text{len}(dest) \geq \text{len}(\text{string_{dest}} + src)\), or else we'll get buffer overflow.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7c6f2e1" class="outline-2">
+<h2 id="org7c6f2e1">String I/O</h2>
+<div class="outline-text-2" id="text-org7c6f2e1">
+<p>
+We print strings as follows;
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">char a[] = "cat";
+printf("the %s in the hat\n", a);
+</pre>
+</div>
+
+<p>
+For reading in strings, scanf will read a word at a time, in other words it will stop once whitespace or '\n' is
+encountered.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">char name[4]; // "Ben"
+printf("What is your name?\n");
+scanf("%s", name);
+</pre>
+</div>
+
+<p>
+<b>Note</b>: We defined the char array as length \(4\), this is important as we need extra space for the null terminator.
+<b>Note</b>: The running times for both reading and outputting is of course \(O(n)\) since strings are char arrays fundamentally. 
+</p>
+</div>
+
+<div id="outline-container-org4bc88a8" class="outline-3">
+<h3 id="org4bc88a8">Example, continuous scanning.</h3>
+<div class="outline-text-3" id="text-org4bc88a8">
+<p>
+For scanning multiple strings, use a while loop which asserts to true as long as we have valid return on reading,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">char name[10] = {0};
+while(scanf("%s", name) == 1){
+  printf("Hello %s\n", name);
+ }
+
+// Input : Daniel Bob [EOF]
+// Hello Daniel
+// Hello Bob
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+<div id="outline-container-orgdaf606c" class="outline-2">
+<h2 id="orgdaf606c">Arrays vs Pointers</h2>
+<div class="outline-text-2" id="text-orgdaf606c">
+<p>
+In practice, you can define strings in the following equivalent ways;
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">void f(){
+  char a[] = "one string";
+  char *p = "another string";
+}
+</pre>
+</div>
+<p>
+However note the following;
+</p>
+<ul class="org-ul">
+<li>The first reserves space for an initialized character array in the stack frame.</li>
+<li>The second reserves space for a char pointer in the stack frame (8 bytes), initialized to point    
+at a string literal (const char array) in the read-only data-section.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge750017" class="outline-2">
+<h2 id="orge750017">2D Arrays for strings</h2>
+<div class="outline-text-2" id="text-orge750017">
+<p>
+For defining 2D arrays, or at least having the same effect, we use array of pointers;
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">char *aos[] = {"string1", "string another", "string final"};
+</pre>
+</div>
+<p>
+We can use the same indexing, 'char[x][y]', which will access the \(y^{th}\) char is the \(x^{th}\) string. 
+</p>
+<ul class="org-ul">
+<li>aos[0][1] == 't'</li>
+<li>aos[2][3] == 'i'</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

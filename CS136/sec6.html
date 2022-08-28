@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-06-07 Tue 23:50 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Section 5 - Modularization</title>
+<meta name="author" content="Abdullah Zubair" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Section 6 - Modularization</h1>
+
+<div id="outline-container-org00494cc" class="outline-2">
+<h2 id="org00494cc">Modularization</h2>
+<div class="outline-text-2" id="text-org00494cc">
+<p>
+Modularization is the concept of breaking up a large piece of software into individual disjoint components, which in turn
+allow parts of the software to be more flexible; <b>reusable, maintainable and abstract</b>.
+</p>
+
+<p>
+<b>Module:</b> Provides a collection of functions for some common purpose.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org783cd4e" class="outline-2">
+<h2 id="org783cd4e">Building a Program</h2>
+<div class="outline-text-2" id="text-org783cd4e">
+<p>
+Note that you can compile with multiple machine code files linked together, <i>however</i>, note that there can <b>only</b> be one main
+file, and hence no main file can exist in modules.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfe68304" class="outline-2">
+<h2 id="orgfe68304">Declarations</h2>
+<div class="outline-text-2" id="text-orgfe68304">
+<p>
+In C, a function must be <b>declared</b> before it can be &ldquo;accessed&rdquo; (or referenced) 
+</p>
+
+<p>
+<b>Deceleration</b>: Introduces an identifier (name) into a program a defines its type 
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">my_func</span>(<span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">a</span>, <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">b</span>);
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org6ec1068" class="outline-3">
+<h3 id="org6ec1068">Declaration vs Definition</h3>
+<div class="outline-text-3" id="text-org6ec1068">
+<ul class="org-ul">
+<li><b>Declaration</b>: Only specifies the type of an identifier.</li>
+<li><b>Definition</b>: Instructs C to &ldquo;create&rdquo; the identifier, also <i>includes</i> an identifier.</li>
+</ul>
+
+<p>
+<b>Note</b>: The syntax and semantics of definitions and declaration enable you to call a function after declaring it
+        in the main function, allowing you to define it later on. For example the following is valid syntax,
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++">    <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">my_add</span>(<span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">a</span>, <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">b</span>);
+    <span style="color: #859900; font-weight: bold;">extern</span> <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">my_var</span>;
+
+    <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">main</span>(){
+      printf(<span style="color: #2aa198;">"%d/n"</span>, my_add(my_var,<span style="color: #6c71c4; font-weight: bold;">4</span>));
+    }
+
+    <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">my_add</span>(<span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">a</span>, <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">b</span>){
+      <span style="color: #859900; font-weight: bold;">return</span> a + b;
+    }
+
+    <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">my_var</span> = <span style="color: #6c71c4; font-weight: bold;">4</span>;
+
+    <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">printf -&gt; 8</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org047841c" class="outline-2">
+<h2 id="org047841c">Scope vs Memory</h2>
+<div class="outline-text-2" id="text-org047841c">
+<p>
+Recall, <b>all</b> global variables (from all files) are in memory <b>before</b> the program is &ldquo;run&rdquo;. So for example,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">main</span>(){
+    printf(<span style="color: #2aa198;">"%d/n"</span>, z);
+  }
+
+  <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">z</span> = <span style="color: #6c71c4; font-weight: bold;">3</span>;
+</pre>
+</div>
+<p>
+In the above code, the integer <code>z</code> is in memory (and initialized) before main is called, however because it is out of scope
+it will fail during compilation because it has not been declared yet.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org34a065d" class="outline-2">
+<h2 id="org34a065d">Program Scope</h2>
+<div class="outline-text-2" id="text-org34a065d">
+<p>
+A declaration can bring an identifier from another file into scope. For example if we had a module like,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">module.c [MOUDLE]</span>
+<span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">g</span> = <span style="color: #6c71c4; font-weight: bold;">8</span>;
+</pre>
+</div>
+
+<p>
+And we were to use this in our main function, then the syntax would be valid,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #859900; font-weight: bold;">extern</span> <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">g</span>;
+<span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">MUST DECLARE</span>
+
+<span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">main</span>(){
+  printf(<span style="color: #2aa198;">"%d/n"</span>, g);
+  <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">ok</span>
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgba1c967" class="outline-2">
+<h2 id="orgba1c967">Module Scope</h2>
+<div class="outline-text-2" id="text-orgba1c967">
+<p>
+To hide certain data/variables in a given module from other clients or programs that would call upon them, prefix
+the definition with <code>static</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #96A7A9; font-style: italic;">//</span><span style="color: #96A7A9; font-style: italic;">==== module.c [MOUDLE]</span>
+
+<span style="color: #859900; font-weight: bold;">static</span> <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">g</span> = <span style="color: #6c71c4; font-weight: bold;">8</span>;
+<span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">No longer accessible to other clients</span>
+</pre>
+</div>
+<p>
+Essentially the scope of the variable is limited to the given module only.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgefe6c88" class="outline-2">
+<h2 id="orgefe6c88">Module interface</h2>
+<div class="outline-text-2" id="text-orgefe6c88">
+<p>
+For any given module, the client only really needs the documentation and decleration of the list of functions that the module provides, the actual
+implementation need not be given. This list of functions with strictly declarations is known as the interface.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org484d3bb" class="outline-2">
+<h2 id="org484d3bb">Interface (.h) files</h2>
+<div class="outline-text-2" id="text-org484d3bb">
+</div>
+<div id="outline-container-org5edab17" class="outline-3">
+<h3 id="org5edab17">Interface Contents</h3>
+<div class="outline-text-3" id="text-org5edab17">
+<ol class="org-ol">
+<li>An overall description of the module</li>
+<li>A function declaration for each provided function.</li>
+<li>Documentation for each function.</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org166f6d8" class="outline-3">
+<h3 id="org166f6d8">File structure</h3>
+<div class="outline-text-3" id="text-org166f6d8">
+<p>
+The interface is composed in a seperate file known as the <code>.h</code> file, so for example
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">        <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">fun.h [INTERFACE ]</span>
+        <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">Module contains a few sample functions</span>
+
+        <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">my_add(a,b) Returns the sum of the integers a,b.</span>
+        <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">my_add</span>(<span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">a</span>, <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">b</span>);
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc179489" class="outline-2">
+<h2 id="orgc179489">#Include</h2>
+<div class="outline-text-2" id="text-orgc179489">
+<p>
+A <b>preprocessor directive temporarily</b> &ldquo;modifies&rdquo; a source file just before it is run.
+</p>
+
+<p>
+The <i>directive</i> <code>#include</code>  &ldquo;cuts&amp;pastes&rdquo; the contents of the given interface file into the current
+<code>.c</code> file, in order to avoid having to manually copy and paste all of the listed declarations into the
+current file.
+</p>
+</div>
+
+<div id="outline-container-org2b1ceed" class="outline-3">
+<h3 id="org2b1ceed">Difference between &lt;&gt; and &ldquo;&rdquo;</h3>
+<div class="outline-text-3" id="text-org2b1ceed">
+<p>
+For standard libraries, use &lt;&gt;. Else, for libraries you develop or that are developed by others, use &ldquo;&rdquo;.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge89c084" class="outline-2">
+<h2 id="orge89c084">Few notes on Implementations</h2>
+<div class="outline-text-2" id="text-orge89c084">
+<p>
+For a given interface file, the corresponding implementation file <i>should</i> <code>#include</code> its own header file.
+This is to ensure that there are no discrepancies between the interface and the implementations
+</p>
+
+<p>
+<b>Note:</b> Documentation is not required in the implementation file, just a note to refer to the corresponding interface file.
+</p>
+</div>
+
+<div id="outline-container-orga1e025f" class="outline-3">
+<h3 id="orga1e025f">Test Clients</h3>
+<div class="outline-text-3" id="text-orga1e025f">
+<p>
+Its often good practice to write a seperate test client for a given module. For example, suppose we have the
+module <code>fun.h</code>, we may test it as,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #268bd2; font-weight: bold;">     #include</span> <span style="color: #2aa198;">&lt;assert.h&gt;</span>
+<span style="color: #268bd2; font-weight: bold;">     #include</span> <span style="color: #2aa198;">"fun.h"</span>
+
+     <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">main</span>(){
+     assert(is_fun(<span style="color: #6c71c4; font-weight: bold;">42</span>));
+     assert(<span style="color: #268bd2; font-weight: bold;">!</span>is_fun(<span style="color: #6c71c4; font-weight: bold;">13</span>));
+     }
+</pre>
+</div>
+
+<p>
+<b>Note</b>: Testing the module is optional generally speaking, however should you choose to do so you must do it in this fashion,
+as you can only define a single main function with a given module grouping.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga25d65b" class="outline-2">
+<h2 id="orga25d65b">Designing Modules</h2>
+<div class="outline-text-2" id="text-orga25d65b">
+</div>
+<div id="outline-container-org3ababd3" class="outline-3">
+<h3 id="org3ababd3">Cohesion vs Coupling</h3>
+<div class="outline-text-3" id="text-org3ababd3">
+<p>
+Ideally we would like to maximize the ratio of Cohesion : Coupling, meaning we would would like the functions to all be related and working
+to a common goal (cohesion) and we would also like interaction between modules to be fairly disjoint (Coupling).
+</p>
+</div>
+</div>
+<div id="outline-container-orge831baa" class="outline-3">
+<h3 id="orge831baa">Information Hiding</h3>
+<div class="outline-text-3" id="text-orge831baa">
+<p>
+Two key advantages to information hiding,
+</p>
+<ul class="org-ul">
+<li><b>Security</b>: Prevents Client from tampering with the module.</li>
+<li><b>Flexibility</b>: Allows for flexible changes to code.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8f3dfb9" class="outline-2">
+<h2 id="org8f3dfb9">Opaque Structures in C</h2>
+<div class="outline-text-2" id="text-org8f3dfb9">
+<p>
+We can declare an opaque structure with an <b>Incomplete declaration</b>, which basically asserts that the fields are not explicity declared.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #859900; font-weight: bold;">struct</span> <span style="color: #b58900; font-style: italic;">box</span>;
+</pre>
+</div>
+
+<p>
+With an incomplete declaration, only pointers to the structure can be defined.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1888310" class="outline-2">
+<h2 id="org1888310">ADT&rsquo;s</h2>
+<div class="outline-text-2" id="text-org1888310">
+<p>
+An ADT is an abstract data type, which we define, its purpose is to store some data and allow access to the data through interface functions
+(ADT operations). The underlying data structure and implementation of an ADT are <i>hidden</i> from the client. (In turn we get flexibility and security)
+</p>
+</div>
+
+<div id="outline-container-org132c311" class="outline-3">
+<h3 id="org132c311">Data Structures vs ADT&rsquo;s</h3>
+<div class="outline-text-3" id="text-org132c311">
+<ul class="org-ul">
+<li>As a client, if you have a data structure, then you know how the given data is &ldquo;structured&rdquo; and can access it in anyway you like.</li>
+<li>As for an ADT, you do not know how the datat is structured and only have access to the ADT operations.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

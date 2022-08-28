@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-06-10 Fri 22:24 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Section 7 - Arrays</title>
+<meta name="author" content="Abdullah Zubair" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Section 7 - Arrays</h1>
+<div id="outline-container-org7a337aa" class="outline-2">
+<h2 id="org7a337aa">Arrays</h2>
+<div class="outline-text-2" id="text-org7a337aa">
+<p>
+Arrays are data structures that have a fixed number of elements contained within.
+</p>
+<div class="org-src-container">
+<pre class="src src-c">  <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">my_array</span>[<span style="color: #BBCCAA; font-weight: bold;">4</span>] = {<span style="color: #BBCCAA; font-weight: bold;">2</span>,<span style="color: #BBCCAA; font-weight: bold;">3</span>,<span style="color: #BBCCAA; font-weight: bold;">1</span>,<span style="color: #BBCCAA; font-weight: bold;">4</span>};
+</pre>
+</div>
+<p>
+We must know the <b>length</b> of the array in advance as well as the <b>type</b>. We are also flexible to use multiple
+operations on elements of an array, for example consider,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">a</span>[<span style="color: #BBCCAA; font-weight: bold;">4</span>] = {<span style="color: #BBCCAA; font-weight: bold;">3</span>,<span style="color: #BBCCAA; font-weight: bold;">4</span>,<span style="color: #BBCCAA; font-weight: bold;">5</span>,<span style="color: #BBCCAA; font-weight: bold;">1</span>};
+
+  <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">j</span> = a[<span style="color: #BBCCAA; font-weight: bold;">0</span>];
+  <span style="color: #33CCAA;">int</span> *<span style="color: #5FD7FF;">p</span> = &amp;a[<span style="color: #BBCCAA; font-weight: bold;">3</span>];
+
+  a[<span style="color: #BBCCAA; font-weight: bold;">2</span>] = a[a[<span style="color: #BBCCAA; font-weight: bold;">3</span>]];
+  a[<span style="color: #BBCCAA; font-weight: bold;">2</span>]++;
+</pre>
+</div>
+</div>
+<div id="outline-container-orge96fd77" class="outline-3">
+<h3 id="orge96fd77">Initialization</h3>
+<div class="outline-text-3" id="text-orge96fd77">
+<p>
+You can initialize an array completely or partially (or empty) as follows
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">     <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">a</span>[<span style="color: #BBCCAA; font-weight: bold;">3</span>] = {};
+     <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">b</span>[<span style="color: #BBCCAA; font-weight: bold;">2</span>] = {<span style="color: #BBCCAA; font-weight: bold;">1</span>,<span style="color: #BBCCAA; font-weight: bold;">2</span>};
+     <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">v</span>[<span style="color: #BBCCAA; font-weight: bold;">5</span>] = {<span style="color: #BBCCAA; font-weight: bold;">1</span>,<span style="color: #BBCCAA; font-weight: bold;">2</span>,<span style="color: #BBCCAA; font-weight: bold;">3</span>}; <span style="color: #559944;">// </span><span style="color: #559944;">REST ARE ZERO AUTOMATICALLY</span>
+</pre>
+</div>
+<p>
+<b>Uninitialized</b> global arrays (LIKE INTEGERS) will be initialized to zero, whereas (LIKE INTEGERS) uninitialized local arrays will just have 
+random values from the previous stack.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4b9b9a8" class="outline-2">
+<h2 id="org4b9b9a8">Array Size</h2>
+<div class="outline-text-2" id="text-org4b9b9a8">
+<ul class="org-ul">
+<li>The <b>length</b> of an array is the number of elements in the array.</li>
+<li>The <b>size</b> of an array is the number of bytes it occupies.</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">a</span>[<span style="color: #BBCCAA; font-weight: bold;">6</span>] = {};
+</pre>
+</div>
+<p>
+The array above will occupy, (6 x sizeof(int)) = 24 bytes.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0c3881c" class="outline-2">
+<h2 id="org0c3881c">The Array Identifier</h2>
+<div class="outline-text-2" id="text-org0c3881c">
+<p>
+An array identifier by itself does not actually have any intrinsic purpose, instead it just simply referees to the memory address of the array,
+which also happens to be the address of the first element.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">a</span>[<span style="color: #BBCCAA; font-weight: bold;">6</span>] = {<span style="color: #BBCCAA; font-weight: bold;">4</span>,<span style="color: #BBCCAA; font-weight: bold;">5</span>,<span style="color: #BBCCAA; font-weight: bold;">6</span>,<span style="color: #BBCCAA; font-weight: bold;">7</span>,<span style="color: #BBCCAA; font-weight: bold;">6</span>,<span style="color: #BBCCAA; font-weight: bold;">5</span>};
+
+  trace_ptr(a);
+  trace_ptr(&amp;a);
+  trace_ptr(&amp;a[<span style="color: #BBCCAA; font-weight: bold;">0</span>]);
+
+  <span style="color: #559944;">// </span><span style="color: #559944;">trace_ptr(a) = trace_ptr(&amp;a) = trace_ptr(&amp;a[0])</span>
+</pre>
+</div>
+<p>
+Given that the using the identifier of the array on its own is equivalent to the the address of the first element,
+we can leverage this to extract (dereference) the value of the first element,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">a</span>[<span style="color: #BBCCAA; font-weight: bold;">3</span>] = {<span style="color: #BBCCAA; font-weight: bold;">0</span>,<span style="color: #BBCCAA; font-weight: bold;">2</span>,<span style="color: #BBCCAA; font-weight: bold;">3</span>};
+
+  trace_int(*a);
+  trace_int(a[<span style="color: #BBCCAA; font-weight: bold;">0</span>]);
+
+  <span style="color: #559944;">// </span><span style="color: #559944;">trace_int(*a) =  trace_int(a[0]);</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbc46640" class="outline-2">
+<h2 id="orgbc46640">Function Syntax with Arrays</h2>
+<div class="outline-text-2" id="text-orgbc46640">
+<p>
+Use the following syntax for declaring an array as an argument (const or not)
+</p>
+<div class="org-src-container">
+<pre class="src src-c++"><span style="color: #559944;">// </span><span style="color: #559944;">my_sum(arr, len) Computes sum of contents of the array</span>
+  <span style="color: #33CCAA;">int</span> <span style="color: #DDDDAA;">my_sum</span>(<span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">arr</span>[], <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">len</span>);
+</pre>
+</div>
+
+<p>
+Note that since we can only pass the address of an array, we have to pass a separate variable to keep track
+of the length of the array.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org68d2350" class="outline-2">
+<h2 id="org68d2350">Pointer Arithmetic</h2>
+<div class="outline-text-2" id="text-org68d2350">
+<ul class="org-ul">
+<li>Given a pointer <code>p</code>, the expression <code>(p + 1)</code> will point to the next item in memory. The specific expression is given as,</li>
+</ul>
+<p>
+\((p + i) = p + i \cdot \text{sizeof}(*p)\). Subtraction and decremantation/incrimination works the same way.
+</p>
+<ul class="org-ul">
+<li>You cannot add two pointers</li>
+<li>You can subtract two pointers of the same type and the expression will be evaluated to,
+\(p - q = \frac{p-q}{\text{sizeof}(*p)}\)</li>
+<li>You can also do standard comparison operations; &lt;, &lt;=, !, <code>=, &gt;</code>, &gt;</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgc3215ef" class="outline-2">
+<h2 id="orgc3215ef">Pointer Arithmetic and Arrays</h2>
+<div class="outline-text-2" id="text-orgc3215ef">
+<p>
+Pointer arithmetic is precisely the manner in which elements are extracted from an array, for example.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">a</span>[<span style="color: #BBCCAA; font-weight: bold;">3</span>] = {<span style="color: #BBCCAA; font-weight: bold;">5</span>,<span style="color: #BBCCAA; font-weight: bold;">3</span>,<span style="color: #BBCCAA; font-weight: bold;">2</span>};
+
+  <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">j</span> = a[<span style="color: #BBCCAA; font-weight: bold;">1</span>];
+  <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">i</span> = *(a + <span style="color: #BBCCAA; font-weight: bold;">1</span>);
+
+  assert(i == j);
+  <span style="color: #559944;">// </span><span style="color: #559944;">works</span>
+
+  <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">k</span> = &amp;a[<span style="color: #BBCCAA; font-weight: bold;">2</span>];
+  <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">m</span> = (a + <span style="color: #BBCCAA; font-weight: bold;">2</span>);
+
+  assert(k == m);
+  <span style="color: #559944;">// </span><span style="color: #559944;">works</span>
+
+</pre>
+</div>
+</div>
+<div id="outline-container-org5555a8e" class="outline-3">
+<h3 id="org5555a8e">Example, summing array with pointer arithmetic</h3>
+<div class="outline-text-3" id="text-org5555a8e">
+<p>
+We can implement the sum<sub>array</sub> algorithm using strictly pointer syntax.
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">     <span style="color: #33CCAA;">int</span> <span style="color: #DDDDAA;">sum_array</span>(<span style="color: #3399DD;">const</span> <span style="color: #33CCAA;">int</span> *<span style="color: #5FD7FF;">a</span>, <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">len</span>){
+       <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">sum</span> = <span style="color: #BBCCAA; font-weight: bold;">0</span>;
+       <span style="color: #3399DD;">for</span>(<span style="color: #33CCAA;">int</span> *<span style="color: #5FD7FF;">p</span> = a; p &lt; a + len; p++){
+     sum += *p;
+       }
+
+       <span style="color: #3399DD;">return</span> sum;
+     }
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org43ed6e6" class="outline-2">
+<h2 id="org43ed6e6">Selection Sort</h2>
+<div class="outline-text-2" id="text-org43ed6e6">
+<p>
+The following is the Selection Sort Algorithm,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #33CCAA;">void</span> <span style="color: #DDDDAA;">selection_sort</span>(<span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">a</span>[], <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">len</span>){
+    <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">pos</span> = <span style="color: #BBCCAA; font-weight: bold;">0</span>;
+    <span style="color: #3399DD;">for</span>(<span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">i</span> = <span style="color: #BBCCAA; font-weight: bold;">0</span> ; i &lt; len; i++){
+      pos = i;
+      <span style="color: #3399DD;">for</span>(<span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">j</span> = i + <span style="color: #BBCCAA; font-weight: bold;">1</span>; j &lt; len; j++){
+    <span style="color: #3399DD;">if</span>(a[j] &lt; pos){
+      pos = j;
+    }
+      }
+      swap(&amp;a[i], &amp;a[pos]);
+    }
+  }
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org806c7ae" class="outline-2">
+<h2 id="org806c7ae">Insertion Sort</h2>
+<div class="outline-text-2" id="text-org806c7ae">
+<p>
+The following is the Insertion Sort Algorithm,
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #33CCAA;">void</span> <span style="color: #DDDDAA;">insertion_sort</span>(<span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">a</span>[], <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">len</span>){
+    <span style="color: #3399DD;">for</span>(<span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">i</span> = <span style="color: #BBCCAA; font-weight: bold;">1</span>; i &lt; len; i++){
+      <span style="color: #3399DD;">for</span>(<span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">j</span> = i; j &gt; <span style="color: #BBCCAA; font-weight: bold;">0</span> &amp;&amp; a[j - <span style="color: #BBCCAA; font-weight: bold;">1</span>]&gt; a[j]; j--){
+    swap(&amp;a[j], &amp;a[j - <span style="color: #BBCCAA; font-weight: bold;">1</span>]);
+      }
+    }
+  }
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc8a5e87" class="outline-2">
+<h2 id="orgc8a5e87">Quicksort</h2>
+<div class="outline-text-2" id="text-orgc8a5e87">
+<p>
+I was lazy to implement this
+</p>
+</div>
+</div>
+
+<div id="outline-container-org48c2ce8" class="outline-2">
+<h2 id="org48c2ce8">Linear Search</h2>
+<div class="outline-text-2" id="text-org48c2ce8">
+<p>
+Standard linear searching algorithm for finding some element (first one if duplicates exist) in an array
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #33CCAA;">int</span> <span style="color: #DDDDAA;">lin_search</span>(<span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">target</span>, <span style="color: #3399DD;">const</span> <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">a</span>[], <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">len</span>){
+    <span style="color: #3399DD;">for</span>(<span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">x</span> = <span style="color: #BBCCAA; font-weight: bold;">0</span> ; x &lt; len; x++){
+      <span style="color: #3399DD;">if</span>(a[x] == target){
+    <span style="color: #3399DD;">return</span> x;
+      }
+    }
+    <span style="color: #3399DD;">return</span> -<span style="color: #BBCCAA; font-weight: bold;">1</span>;
+  }
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb14dcbb" class="outline-2">
+<h2 id="orgb14dcbb">Binary Search</h2>
+<div class="outline-text-2" id="text-orgb14dcbb">
+<p>
+Standard binary search algorithm for finding some element (first one if duplicates exist) in an array
+<b>USE IFF ARRAY IS SORTED</b>
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">  <span style="color: #33CCAA;">int</span> <span style="color: #DDDDAA;">binary_search</span>(<span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">target</span>, <span style="color: #3399DD;">const</span> <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">a</span>[], <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">len</span>){
+    <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">HIGH</span> = <span style="color: #BBCCAA; font-weight: bold;">0</span>;
+    <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">LOW</span> = len - <span style="color: #BBCCAA; font-weight: bold;">1</span>;
+
+    <span style="color: #3399DD;">while</span>(LOW &lt;= HIGH){
+      <span style="color: #33CCAA;">int</span> <span style="color: #5FD7FF;">mid</span> = (LOW + HIGH) / <span style="color: #BBCCAA; font-weight: bold;">2</span>;
+
+      <span style="color: #3399DD;">if</span>(a[mid] == target){
+    <span style="color: #3399DD;">return</span> mid;
+      } <span style="color: #3399DD;">else</span> <span style="color: #3399DD;">if</span>(a[mid] &lt; target){
+    LOW = mid + <span style="color: #BBCCAA; font-weight: bold;">1</span>;
+      } <span style="color: #3399DD;">else</span> {
+    HIGH = mid - <span style="color: #BBCCAA; font-weight: bold;">1</span>;
+      }
+    }
+
+    <span style="color: #3399DD;">return</span> -<span style="color: #BBCCAA; font-weight: bold;">1</span>;
+  }
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org16b080d" class="outline-2">
+<h2 id="org16b080d">Multidimensional Array</h2>
+<div class="outline-text-2" id="text-org16b080d">
+<p>
+We cannot explicitly define a 2D array (like Racket) but we can play around with syntax to get the job done. Suppose for a \(n \times m\),
+array \(A\), I wanted to access the element \(A_{ij}\), aka the element in row \(i\) and col \(j\), where \(0 \leq i < n\), \(0 \leq j < m\),
+then the formula is <code>A[i * m + j]</code> 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf435f93" class="outline-2">
+<h2 id="orgf435f93">Oversized Arrays</h2>
+<div class="outline-text-2" id="text-orgf435f93">
+<p>
+Because in C we must know the length of the array in advance when we declare it, a common strategy is to simply declare the array with an 
+OVERSIZED length, which can allow for flexibility in the future to add elements to the list should we choose to do so. (Try to avoid because
+this can really waste memory).
+</p>
+</div>
+<div id="outline-container-org09ceaf5" class="outline-3">
+<h3 id="org09ceaf5">EXIT<sub>FAILURE</sub></h3>
+<div class="outline-text-3" id="text-org09ceaf5">
+<p>
+In any situation where you are nested in multiple functions in <code>main</code> and you want to simply exit the program, use;
+</p>
+<div class="org-src-container">
+<pre class="src src-c++">     exit(EXIT_FAILURE);
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-05-10 Tue 08:53 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Section 3 - An Intro to C</title>
+<meta name="author" content="Abdullah Zubair" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Section 3 - An Intro to C</h1>
+<div id="outline-container-org05efa11" class="outline-2">
+<h2 id="org05efa11">Functional Programming</h2>
+<div class="outline-text-2" id="text-org05efa11">
+<p>
+<b>Functional Programming paradigm</b>: Functions are pure, as in,
+</p>
+<ul class="org-ul">
+<li>Functions only return values</li>
+<li>Return values only depend on argument values.</li>
+<li>Only constants are used.</li>
+</ul>
+
+<p>
+<b>Imperative Programming paradigm</b>: <code class="src src-python"><span style="color: #859900; font-weight: bold;">for</span>(<span style="color: #d33682; font-style: italic;">int</span> i = <span style="color: #6c71c4; font-weight: bold;">0</span> ;i &lt; n; i++)</code> Functions are impure, as in,
+</p>
+<ul class="org-ul">
+<li>Variables are used.</li>
+<li>Mutation.</li>
+<li>Sequences of statements are executed in a block.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org09944ae" class="outline-2">
+<h2 id="org09944ae">Imperative Programming</h2>
+<div class="outline-text-2" id="text-org09944ae">
+<p>
+Programs are mostly sequences of statements to be executed. The significant defence between functional programming and
+imperative programming is that imperative programming produces <b>side effects</b>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5f6beef" class="outline-2">
+<h2 id="org5f6beef">Text I/O</h2>
+<div class="outline-text-2" id="text-org5f6beef">
+<p>
+To display output in C, we use the <code class="src src-c">printf</code>.
+</p>
+</div>
+
+<div id="outline-container-orgd9ecf5b" class="outline-3">
+<h3 id="orgd9ecf5b">printf</h3>
+<div class="outline-text-3" id="text-orgd9ecf5b">
+<ul class="org-ul">
+<li><p>
+In order to properly format code output to appear on multiple lines, use the <b>newline character</b> <code class="src src-c"><span style="color: #2aa198;">"\n"</span></code>
+</p>
+<div class="org-src-container">
+<pre class="src src-c">     printf(<span style="color: #2aa198;">"Hello \nC can be\ntricky"</span>)
+
+     <span style="color: #96A7A9; font-style: italic;">/*</span>
+
+<span style="color: #96A7A9; font-style: italic;">     Hello</span>
+<span style="color: #96A7A9; font-style: italic;">     C can be</span>
+<span style="color: #96A7A9; font-style: italic;">     tricky</span>
+
+<span style="color: #96A7A9; font-style: italic;">       */</span>
+</pre>
+</div></li>
+
+<li><p>
+To output an <b>integer expression</b>, use the &ldquo;%d&rdquo; format specifier.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">     printf(<span style="color: #2aa198;">"2 + 2 is : %d\n"</span>, <span style="color: #6c71c4; font-weight: bold;">2</span> + <span style="color: #6c71c4; font-weight: bold;">2</span>) <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">2 + 2 is : 4</span>
+</pre>
+</div>
+
+<p>
+For multiple integer expressions, follow each expression in order with a comma and include a corresponding &ldquo;%d&rdquo;
+</p></li>
+
+<li><p>
+To output an actual percent sign (%), use (%%).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">     printf(<span style="color: #2aa198;">"You got %d%% on your test"</span>, <span style="color: #6c71c4; font-weight: bold;">100</span>) <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">You got 100% on your test</span>
+</pre>
+</div></li>
+
+<li>To output an actual backslash (\), use (\\).</li>
+
+<li>To output an actual quote (&ldquo;), use (\&rdquo;).</li>
+
+<li><b>Note</b>: Printf <i>does</i> return a value, it returns the number of characters in the string its passed.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1e5a970" class="outline-2">
+<h2 id="org1e5a970">Functions with Side Effects</h2>
+<div class="outline-text-2" id="text-org1e5a970">
+<p>
+Programming side effects are when the state of something changes. Some side effects include,
+</p>
+<ul class="org-ul">
+<li>Output to the console</li>
+</ul>
+
+<p>
+We <b>must</b> document any side effects that our functions may produce. <code class="src src-c">printf</code> itself is a function that
+produces a side effect (changes the display or output) and hence any function that calls <code class="src src-c">printf</code>
+produces side effects.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd9a24dd" class="outline-2">
+<h2 id="orgd9a24dd">Testing I/O</h2>
+<div class="outline-text-2" id="text-orgd9a24dd">
+<p>
+Recall that any assertion based testing will only check if the program returns the correct value, it <b>does not</b> check wether it produced the correct or desired output. For this we can resort to Seashell I/O testing or we can implement some customized technique to test from the terminal.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1a9b4b8" class="outline-2">
+<h2 id="org1a9b4b8">Void Functions</h2>
+<div class="outline-text-2" id="text-org1a9b4b8">
+<p>
+Functions that return <b>no</b> values are typed as <code class="src src-c"><span style="color: #b58900; font-style: italic;">void</span></code>. The <code class="src src-c"><span style="color: #859900; font-weight: bold;">return</span></code> statement is optional.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0a862a0" class="outline-2">
+<h2 id="org0a862a0">Statements</h2>
+<div class="outline-text-2" id="text-org0a862a0">
+<p>
+There are only three types of C statements (in the plural sense).
+</p>
+</div>
+
+<div id="outline-container-org65bdb6a" class="outline-3">
+<h3 id="org65bdb6a">Compound statements (blocks {}).</h3>
+<div class="outline-text-3" id="text-org65bdb6a">
+<p>
+A sequence of statements to be executed.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf736b65" class="outline-3">
+<h3 id="orgf736b65">Expression statements</h3>
+<div class="outline-text-3" id="text-orgf736b65">
+<p>
+Statements for generating side effects.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3d16333" class="outline-3">
+<h3 id="org3d16333">Control Flow statement</h3>
+<div class="outline-text-3" id="text-org3d16333">
+<p>
+Control the order in which other statements are executed.
+(Eg. return, if, else)
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org03b5be3" class="outline-2">
+<h2 id="org03b5be3">Examples of Side Effects</h2>
+<div class="outline-text-2" id="text-org03b5be3">
+<p>
+The primary types of side effects we will be analyzing  are;
+</p>
+<ul class="org-ul">
+<li>Output</li>
+<li>Mutation (Modifying variables)</li>
+<li>Input</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4ed682c" class="outline-2">
+<h2 id="org4ed682c">Variables</h2>
+<div class="outline-text-2" id="text-org4ed682c">
+<p>
+Variables store values, to define them we use the following syntax;
+</p>
+<ul class="org-ul">
+<li>The <b>type</b></li>
+<li>The <b>identifier</b></li>
+<li><p>
+The initial value
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">my_var</span> = <span style="color: #6c71c4; font-weight: bold;">7</span> <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">Definition</span>
+</pre>
+</div>
+
+<p>
+Variable definitions are <b>not</b> statements. Note that the (=) in intilization is not the same as in mutation.
+</p></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgab27ef0" class="outline-2">
+<h2 id="orgab27ef0">Mutation</h2>
+<div class="outline-text-2" id="text-orgab27ef0">
+<p>
+When the value of a variable is changed, it is known as <b>mutation</b>. We achieve mutation using the assignment operator (=).
+</p>
+</div>
+
+<div id="outline-container-org7799a9c" class="outline-3">
+<h3 id="org7799a9c">Assignment operator (=)</h3>
+<div class="outline-text-3" id="text-org7799a9c">
+<p>
+Used to preform mutation. It also <i>produces</i> the right hand side value, in other words we can preform a multi-assignment as follows;
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    x = y = z = <span style="color: #6c71c4; font-weight: bold;">0</span>; <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">(x = (y = (z = 0)))</span>
+</pre>
+</div>
+
+<p>
+In general, <b>avoid</b> having more than one side effect per expression statement.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org70dfd98" class="outline-2">
+<h2 id="org70dfd98">Constant</h2>
+<div class="outline-text-2" id="text-org70dfd98">
+<p>
+A <b>constant</b> is a variable that is immutable.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #859900; font-weight: bold;">const</span> <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">my_const</span> = <span style="color: #6c71c4; font-weight: bold;">7</span> <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">Definition</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga13e2e7" class="outline-2">
+<h2 id="orga13e2e7">Global and Local Varibles</h2>
+<div class="outline-text-2" id="text-orga13e2e7">
+</div>
+<div id="outline-container-orge5e3a57" class="outline-3">
+<h3 id="orge5e3a57">Global Varibles</h3>
+<div class="outline-text-3" id="text-orge5e3a57">
+<ul class="org-ul">
+<li>Varibles that are defined outside of functions</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgba19c1f" class="outline-3">
+<h3 id="orgba19c1f">Local Varibles</h3>
+<div class="outline-text-3" id="text-orgba19c1f">
+<ul class="org-ul">
+<li>Variables that are defined inside of functions</li>
+<li>Have <b>Block Scope</b>, in other words their scope and accessibility extends from definition until the end of the block they are defined within.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">my_global_var</span> = <span style="color: #6c71c4; font-weight: bold;">7</span>;
+
+    <span style="color: #b58900; font-style: italic;">void</span> <span style="color: #b58900;">func</span>(<span style="color: #b58900; font-style: italic;">void</span>){
+      <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">my</span> local_var = <span style="color: #6c71c4; font-weight: bold;">8</span>;
+      <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">...</span>
+    }
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcea2c44" class="outline-2">
+<h2 id="orgcea2c44">Mutating Global/Local Variables</h2>
+<div class="outline-text-2" id="text-orgcea2c44">
+<ul class="org-ul">
+<li>A function that mutates global variables has a <b>mutation</b> side effect and therefore must be documented.</li>
+<li><p>
+A function that mutates a local variable defined within scope is <b>not</b> a mutation side effect, and hence remains pure.
+For example the following is a pure function;
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">        <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">add1</span>(<span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">n</span>){
+          <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">k</span> = <span style="color: #6c71c4; font-weight: bold;">0</span>;
+          k += <span style="color: #6c71c4; font-weight: bold;">1</span>;
+          <span style="color: #859900; font-weight: bold;">return</span> n + k;
+        }
+</pre>
+</div></li>
+<li><b>Note</b>: Parameters are treated like local variables and hence if a function mutates them within scope then it remains pure.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd453339" class="outline-2">
+<h2 id="orgd453339">Global dependency</h2>
+<div class="outline-text-2" id="text-orgd453339">
+<p>
+A function that depends or uses the value of <b>global mutable variables</b> is considered impure although it may not have any side effects.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb75e6f5" class="outline-2">
+<h2 id="orgb75e6f5">Testing Harness</h2>
+<div class="outline-text-2" id="text-orgb75e6f5">
+<p>
+For functions that only return values, you may build a so called <i>testing harness</i> that prints the return values of the function based on a given
+set of input,
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">sqr(n) Returns the square of the integer n.</span>
+
+    <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">sqr_n</span>(<span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">n</span>){
+      <span style="color: #859900; font-weight: bold;">return</span> n * n
+    }
+
+    <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">test_sqr() An I/O testing harness for sqr, continously reads input and prints</span>
+    <span style="color: #96A7A9; font-style: italic;">//      </span><span style="color: #96A7A9; font-style: italic;">sqr(n) for each input.</span>
+    <span style="color: #96A7A9; font-style: italic;">// </span><span style="color: #96A7A9; font-style: italic;">effects: reads input</span>
+    <span style="color: #96A7A9; font-style: italic;">//          </span><span style="color: #96A7A9; font-style: italic;">produces output</span>
+
+    <span style="color: #b58900; font-style: italic;">void</span> <span style="color: #b58900;">test_sqr</span>(<span style="color: #b58900; font-style: italic;">void</span>){
+      <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #268bd2;">n</span> = read_int();
+      <span style="color: #859900; font-weight: bold;">if</span> (n != READ_INT_FAIL){
+        printf(<span style="color: #2aa198;">"%d\n"</span>, sqr(n));
+        test_sqr(n);
+      }
+    }
+
+    <span style="color: #b58900; font-style: italic;">int</span> <span style="color: #b58900;">main</span>(){
+      test_sqr();
+    }
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
